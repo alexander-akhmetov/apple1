@@ -6,6 +6,7 @@ The CPU emulator is in the separate repository:
 
 ![apple1](https://github.com/alexander-akhmetov/apple1/blob/master/image.jpg?raw=true)
 
+[![asciicast](https://asciinema.org/a/RQk0yBtTUDUxo6k7ciJX6k5WG.svg)](https://asciinema.org/a/RQk0yBtTUDUxo6k7ciJX6k5WG)
 
 ## Minichess
 
