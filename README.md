@@ -6,6 +6,35 @@ The CPU emulator is in the separate repository:
 
 ![apple1](https://github.com/alexander-akhmetov/apple1/blob/master/image.jpg?raw=true)
 
+
+## Minichess
+
+```
+NEW GAME
+
+!--!--!--!--!--!--!--!--!
+!WR!WN!WB!WK!WQ!WB!WN!WR! 0
+!--!--!--!--!--!--!--!--!
+!WP!WP!WP!**!WP!WP!WP!WP! 1
+!--!--!--!--!--!--!--!--!
+!**!  !**!  !**!  !**!  ! 2
+!--!--!--!--!--!--!--!--!
+!  !**!  !WP!  !**!  !**! 3
+!--!--!--!--!--!--!--!--!
+!**!  !**!  !**!  !**!  ! 4
+!--!--!--!--!--!--!--!--!
+!  !**!  !**!  !**!  !**! 5
+!--!--!--!--!--!--!--!--!
+!BP!BP!BP!BP!BP!BP!BP!BP! 6
+!--!--!--!--!--!--!--!--!
+!BR!BN!BB!BK!BQ!BB!BN!BR! 7
+!--!--!--!--!--!--!--!--!
+
+ 0  1  2  3  4  5  6  7
+
+WP 13 33
+```
+
 ## How to use
 
 Run binary:
