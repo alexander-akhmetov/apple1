@@ -4,7 +4,7 @@ The CPU emulator is in the separate repository:
 
 * [CPU MOS 6502 emulator](https://github.com/alexander-akhmetov/mos6502).
 
-![apple1-30](https://github.com/alexander-akhmetov/apple1/raw/master/apple1-30.gif)
+<img src="https://github.com/alexander-akhmetov/apple1/raw/master/apple1-30.gif" alt="drawing" width="300"/>
 
 ## How to use
 
