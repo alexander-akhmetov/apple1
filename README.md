@@ -8,7 +8,7 @@ The CPU emulator is in the separate repository:
 
 ## How to use
 
-Run binary:
+Run:
 
 ```
 cargo run
