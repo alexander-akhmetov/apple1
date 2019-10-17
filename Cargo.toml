@@ -6,7 +6,7 @@ edition = "2018"
 
 [dependencies]
 log = "0.4"
-env_logger = "0.6.1"
+env_logger = "0.7.1"
 clap = "2.33.0"
 ncurses = "5.99.0"
 mos6502 = {git = "https://github.com/alexander-akhmetov/mos6502/", tag = "0.1.0"}
