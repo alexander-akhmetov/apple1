@@ -3,6 +3,7 @@
 The CPU emulator is in the separate repository:
 
 * [CPU MOS 6502 emulator](https://github.com/alexander-akhmetov/mos6502).
+* [Docker Hub](https://hub.docker.com/repository/docker/akhmetov/apple1)
 
 <img src="https://github.com/alexander-akhmetov/apple1/raw/master/apple1-30.gif" alt="drawing" width="300"/>
 
@@ -12,6 +13,9 @@ Run:
 
 ```
 cargo run
+
+# or you can use Docker:
+# make docker/run
 ```
 
 The command above starts the Apple-1 emulator with Woz Monitor at the address `0xFF00`. You should see the screen and the command line prompt:
@@ -54,7 +58,13 @@ To see the hex content of the program: `7000.<END ADDR>`, for example: `7000.700
 
 You can type `E000R` to start basic (run program at `E000`).
 
-Simple BASIC program to try:
+Hello world:
+
+```basic
+PRINT "HELLO WORLD!"
+```
+
+Another simple BASIC program to try:
 
 ```basic
 10 FOR I = 1 TO 5
