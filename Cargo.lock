@@ -129,9 +129,9 @@ dependencies = [
 
 [[package]]
 name = "ncurses"
-version = "5.99.0"
+version = "5.100.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15699bee2f37e9f8828c7b35b2bc70d13846db453f2d507713b758fabe536b82"
+checksum = "a7db07ca287f6f4fb267e8b2ab0f9eb68f5a311a97315aaee845afa98f8a416b"
 dependencies = [
  "cc",
  "libc",
