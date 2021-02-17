@@ -12,5 +12,5 @@ path = "src/main.rs"
 log = "0.4"
 env_logger = "0.8.3"
 clap = "2.33.3"
-ncurses = "5.100.0"
+ncurses = "5.101.0"
 mos6502 = {git = "https://github.com/alexander-akhmetov/mos6502/", tag = "0.1.0"}
