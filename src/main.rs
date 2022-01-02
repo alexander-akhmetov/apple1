@@ -86,7 +86,7 @@ impl Apple1 {
                 KBD => Some((KBDCR, 0)),
                 _ => None,
             }
-        };
+        }
 
         self.cpu.memory.register_read_callback(read_callback);
 
@@ -97,7 +97,8 @@ impl Apple1 {
                 (DSP, v) => Some((DSP, v | 0b1000_0000)),
                 _ => None,
             }
-        };
+        }
+
         self.cpu.memory.register_write_callback(write_callback);
     }
 
