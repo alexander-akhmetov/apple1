@@ -127,7 +127,7 @@ checksum = "308cc39be01b73d0d18f82a0e7b2a3df85245f84af96fdddc5d202d27e47b86a"
 [[package]]
 name = "mos6502"
 version = "0.1.0"
-source = "git+https://github.com/alexander-akhmetov/mos6502/?tag=0.1.0#a6216cea8b34b0c10378fe8744495c05a9b8ec70"
+source = "git+https://github.com/alexander-akhmetov/mos6502/?tag=0.2.0#b193e4ad00fd7749244522872117c0729dde0913"
 dependencies = [
  "log",
 ]
