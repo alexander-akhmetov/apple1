@@ -6,7 +6,15 @@ use apple1::{Apple1, Display, Keyboard};
 
 use mos6502::asm::assemble_file;
 
+extern crate clap;
+extern crate ncurses;
+
 use clap::{App, Arg};
+
+// Addresses to put Woz Monitor and BASIC
+// programs
+const WOZMON_ADDR: u16 = 0xFF00;
+const BASIC_ADDR: u16 = 0xE000;
 
 struct NcursesKeyboard {}
 
@@ -23,9 +31,11 @@ impl NcursesKeyboard {
 }
 
 impl Keyboard for NcursesKeyboard {
-    fn init(&self, tx: Sender<u8>) {
+    fn init(&mut self, tx: Sender<u8>) {
         thread::spawn(move || NcursesKeyboard::start_input_reading(tx));
     }
+
+    fn write(&self, _c: char) {}
 }
 
 struct NcursesDisplay {}
@@ -76,7 +86,13 @@ fn main() {
     let display = Box::new(NcursesDisplay::new());
     let keyboard = Box::new(NcursesKeyboard::new());
 
-    let mut apple1 = Apple1::new(display, keyboard, "sys/wozmon.bin", "sys/replica1.bin");
+    let mut apple1 = Apple1::new(display, keyboard);
+
+    let replica1_rom = fs::read("sys/replica1.bin").unwrap();
+    apple1.load(&replica1_rom, BASIC_ADDR);
+
+    let wozmon_rom = fs::read("sys/wozmon.bin").unwrap();
+    apple1.load(&wozmon_rom, WOZMON_ADDR);
 
     if matches.is_present("program") {
         let mut load_program_at = 0x7000;

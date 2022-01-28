@@ -1,14 +1,9 @@
-use std::fs;
 use std::sync::mpsc;
 use std::sync::mpsc::{Receiver, Sender};
 use std::{thread, time};
 
 extern crate mos6502;
 use mos6502::cpu::CPU;
-
-extern crate ncurses;
-
-extern crate clap;
 
 #[macro_use]
 extern crate log;
@@ -23,14 +18,10 @@ const KBD: u16 = 0xD010;
 const KBDCR: u16 = 0xD011;
 const DSP: u16 = 0xD012;
 
-// Addresses to put Woz Monitor and BASIC
-// programs
-const WOZMON_ADDR: u16 = 0xFF00;
-const BASIC_ADDR: u16 = 0xE000;
-
 pub trait Keyboard {
     // Keyboard should send characters as u8 to tx
-    fn init(&self, tx: Sender<u8>);
+    fn init(&mut self, tx: Sender<u8>);
+    fn write(&self, c: char);
 }
 
 pub trait Display {
@@ -56,24 +47,16 @@ impl Apple1 {
     ///
     /// * `wozmon_rom_path` - A string path to a Woz Monitor binary
     /// * `basic_rom_path` - A string path to a Apple-1 BASIC binary
-    pub fn new(
-        display: Box<dyn Display>,
-        keyboard: Box<dyn Keyboard>,
-        wozmon_rom_path: &str,
-        basic_rom_path: &str,
-    ) -> Apple1 {
+    pub fn new(display: Box<dyn Display>, keyboard: Box<dyn Keyboard>) -> Apple1 {
         let mut apple1 = Apple1 {
             cpu: CPU::new(),
-            display: display,
-            keyboard: keyboard,
+            display,
+            keyboard,
         };
 
-        for (file, addr) in &[(basic_rom_path, BASIC_ADDR), (wozmon_rom_path, WOZMON_ADDR)] {
-            let rom = fs::read(file).unwrap_or_else(|_| panic!("No such file: {}", file));
-            apple1.load(&rom, *addr);
-        }
-
         apple1.set_callbacks();
+
+        apple1.display.init();
 
         apple1
     }
@@ -119,27 +102,24 @@ impl Apple1 {
 
     pub fn run(&mut self) {
         let (tx, rx): (Sender<u8>, Receiver<u8>) = mpsc::channel();
-        self.display.init();
         self.keyboard.init(tx);
 
-        while !self.cpu.step() {
-            self.print_output_to_display();
-
+        loop {
+            self.step();
             if let Ok(c) = rx.try_recv() {
-                match c {
-                    0x03 => break, // ^c
-                    // 0x05 => {
-                    //     self.print_status();
-                    //     continue;
-                    // } // ^e
-                    _ => {}
-                };
-
+                if c == 0x03 {
+                    break;
+                }
                 self.write_kbd_input(c);
             }
             // todo: remove after proper implementation in the mos6502
             thread::sleep(time::Duration::from_micros(100));
         }
+    }
+
+    pub fn step(&mut self) {
+        self.cpu.step();
+        self.print_output_to_display();
     }
 
     fn char_to_apple1(&self, c: u8) -> u8 {
@@ -153,7 +133,7 @@ impl Apple1 {
         c | 0x80 // apple1 ascii + set bit 7
     }
 
-    fn write_kbd_input(&mut self, c: u8) {
+    pub fn write_kbd_input(&mut self, c: u8) {
         // Writes user's input to a CPU's memory
         self.cpu.memory.set(KBD, self.char_to_apple1(c));
     }
