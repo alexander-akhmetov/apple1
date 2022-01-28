@@ -12,10 +12,10 @@ The CPU emulator is in the separate repository:
 Run:
 
 ```
-cargo run
+make run
 
 # or you can use Docker:
-# make docker/run
+make docker/run
 ```
 
 The command above starts the Apple-1 emulator with Woz Monitor at the address `0xFF00`. You should see the screen and the command line prompt:
@@ -28,7 +28,7 @@ The command above starts the Apple-1 emulator with Woz Monitor at the address `0
 With optional flag `-p` you can load an additional program to the memory:
 
 ```
-cargo run -- -p asm/apple1hello.asm
+cargo run --features binary -- -p asm/apple1hello.asm
 ```
 
 It will be loaded to the memory with starting address `0x7000`. To run it using Woz Monitor type `7000R` and press enter.
@@ -80,7 +80,7 @@ RUN
 You can disable the screen (`-s`) and enable debug logging:
 
 ```
-RUST_LOG=debug cargo run -- -s -p asm/apple1hello.asm
+RUST_LOG=debug cargo run --features binary -- -s -p asm/apple1hello.asm
 ```
 
 ## Apple 1 Basic
@@ -118,7 +118,7 @@ E3D5: 2C 12 D0
 ### Start Basic
 
 ```
-cargo run
+make run
 ```
 
 and then type `E000R`.
