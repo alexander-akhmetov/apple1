@@ -71,13 +71,13 @@ fn main() {
     let matches = App::new("apple1")
         .arg(
             Arg::with_name("address")
-                .short("a")
+                .short('a')
                 .help("Load program at address, default: 0x7000")
                 .takes_value(true),
         )
         .arg(
             Arg::with_name("program")
-                .short("p")
+                .short('p')
                 .help("Load additional program to 0x7000, accepts binary or *.asm files")
                 .takes_value(true),
         )
