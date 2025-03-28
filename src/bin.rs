@@ -9,7 +9,7 @@ use mos6502::asm::assemble_file;
 extern crate clap;
 extern crate ncurses;
 
-use clap::{App, Arg};
+use clap::{Arg, Command};
 
 // Addresses to put Woz Monitor and BASIC
 // programs
@@ -68,18 +68,18 @@ impl Display for NcursesDisplay {
 fn main() {
     env_logger::init();
 
-    let matches = App::new("apple1")
+    let matches = Command::new("apple1")
         .arg(
-            Arg::with_name("address")
+            Arg::new("address")
                 .short('a')
                 .help("Load program at address, default: 0x7000")
-                .takes_value(true),
+                .num_args(1),
         )
         .arg(
-            Arg::with_name("program")
+            Arg::new("program")
                 .short('p')
                 .help("Load additional program to 0x7000, accepts binary or *.asm files")
-                .takes_value(true),
+                .num_args(1),
         )
         .get_matches();
 
@@ -94,16 +94,16 @@ fn main() {
     let wozmon_rom = fs::read("sys/wozmon.bin").unwrap();
     apple1.load(&wozmon_rom, WOZMON_ADDR);
 
-    if matches.is_present("program") {
+    if matches.contains_id("program") {
         let mut load_program_at = 0x7000;
-        if let Some(addr_string) = matches.value_of("address") {
+        if let Some(addr_string) = matches.get_one::<String>("address") {
             load_program_at =
                 u16::from_str_radix(addr_string, 16).expect("Can't parse HEX start address");
         }
 
         let original_pc = apple1.cpu.pc;
 
-        let filename = matches.value_of("program").unwrap();
+        let filename = matches.get_one::<String>("program").unwrap();
         if filename.ends_with("asm") {
             apple1.load(&assemble_file(filename), load_program_at);
         } else {
