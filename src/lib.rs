@@ -125,7 +125,7 @@ impl Apple1 {
     fn char_to_apple1(&self, c: u8) -> u8 {
         // Apple-1 used only uppercase characters,
         // and 7th bit must be set to 1
-        let mut c = c.to_ascii_uppercase() as u8;
+        let mut c = c.to_ascii_uppercase();
         if c == 0xA {
             c = CR; // CR instead of NL
         }

@@ -1,10 +1,11 @@
 [package]
 name = "apple1"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Alexander Akhmetov <me@alx.cx>"]
-edition = "2021"
+edition = "2024"
 
 [features]
+default = ["binary"]
 binary = ["clap", "ncurses"]
 
 [lib]
