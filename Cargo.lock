@@ -126,9 +126,9 @@ dependencies = [
 
 [[package]]
 name = "env_logger"
-version = "0.11.7"
+version = "0.11.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3716d7a920fb4fac5d84e9d4bce8ceb321e9414b4409da61b07b75c1e3d0697"
+checksum = "13c863f0904021b108aa8b2f55046443e6b1ebde8fd4a15c399893aae4fa069f"
 dependencies = [
  "anstream",
  "anstyle",
@@ -188,7 +188,7 @@ checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 [[package]]
 name = "mos6502"
 version = "0.1.0"
-source = "git+https://github.com/alexander-akhmetov/mos6502/?tag=0.2.0#b193e4ad00fd7749244522872117c0729dde0913"
+source = "git+https://github.com/alexander-akhmetov/mos6502/?tag=0.3.0#5121049877b4ede61109fe85b9d39cbc73b35cf1"
 dependencies = [
  "log",
 ]
