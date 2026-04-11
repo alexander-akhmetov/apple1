@@ -4,6 +4,8 @@ updates:
   directory: "/"
   schedule:
     interval: daily
+  cooldown:
+    default: 3
   open-pull-requests-limit: 10
   reviewers:
   - alexander-akhmetov
