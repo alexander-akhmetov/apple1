@@ -1,4 +1,5 @@
 use std::fs;
+use std::io::{self, Write};
 use std::sync::mpsc::Sender;
 use std::thread;
 
@@ -7,61 +8,80 @@ use apple1::{Apple1, Display, Keyboard};
 use mos6502::asm::assemble_file;
 
 extern crate clap;
-extern crate ncurses;
 
 use clap::{Arg, Command};
+use crossterm::event::{self, Event, KeyCode, KeyModifiers};
+use crossterm::terminal;
 
 // Addresses to put Woz Monitor and BASIC
 // programs
 const WOZMON_ADDR: u16 = 0xFF00;
 const BASIC_ADDR: u16 = 0xE000;
 
-struct NcursesKeyboard {}
+struct TermKeyboard {}
 
-impl NcursesKeyboard {
-    fn new() -> NcursesKeyboard {
-        NcursesKeyboard {}
+impl TermKeyboard {
+    fn new() -> TermKeyboard {
+        TermKeyboard {}
     }
 
     fn start_input_reading(tx: Sender<u8>) {
         loop {
-            tx.send(ncurses::getch() as u8).unwrap();
+            if let Ok(Event::Key(key_event)) = event::read() {
+                if key_event.kind != crossterm::event::KeyEventKind::Press {
+                    continue;
+                }
+                let byte = match key_event.code {
+                    KeyCode::Char('c') if key_event.modifiers.contains(KeyModifiers::CONTROL) => {
+                        0x03
+                    }
+                    KeyCode::Char(c) => c as u8,
+                    KeyCode::Enter => 0x0A,
+                    KeyCode::Backspace => 0x08,
+                    KeyCode::Esc => 0x1B,
+                    _ => continue,
+                };
+                if tx.send(byte).is_err() {
+                    break;
+                }
+            }
         }
     }
 }
 
-impl Keyboard for NcursesKeyboard {
+impl Keyboard for TermKeyboard {
     fn init(&mut self, tx: Sender<u8>) {
-        thread::spawn(move || NcursesKeyboard::start_input_reading(tx));
+        thread::spawn(move || TermKeyboard::start_input_reading(tx));
     }
 
     fn write(&self, _c: char) {}
 }
 
-struct NcursesDisplay {}
+struct TermDisplay {}
 
-impl NcursesDisplay {
-    fn new() -> NcursesDisplay {
-        NcursesDisplay {}
+impl TermDisplay {
+    fn new() -> TermDisplay {
+        TermDisplay {}
     }
 }
 
-impl Display for NcursesDisplay {
+impl Display for TermDisplay {
     fn init(&self) {
-        ncurses::initscr();
-        ncurses::resize_term(60, 40);
-        ncurses::scrollok(ncurses::stdscr(), true);
-        ncurses::noecho();
-        ncurses::raw();
+        terminal::enable_raw_mode().expect("Failed to enable raw mode");
     }
 
     fn stop(&self) {
-        ncurses::endwin();
+        terminal::disable_raw_mode().expect("Failed to disable raw mode");
     }
 
     fn print(&self, c: char) {
-        ncurses::addch(c as ncurses::chtype);
-        ncurses::refresh();
+        let mut stdout = io::stdout();
+        if c == '\n' {
+            write!(stdout, "\r\n").unwrap();
+        } else {
+            write!(stdout, "{}", c).unwrap();
+        }
+        stdout.flush().unwrap();
     }
 }
 
@@ -83,8 +103,8 @@ fn main() {
         )
         .get_matches();
 
-    let display = Box::new(NcursesDisplay::new());
-    let keyboard = Box::new(NcursesKeyboard::new());
+    let display = Box::new(TermDisplay::new());
+    let keyboard = Box::new(TermKeyboard::new());
 
     let mut apple1 = Apple1::new(display, keyboard);
 
